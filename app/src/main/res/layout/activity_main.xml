@@ -60,13 +60,48 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="0.85"
-            >
+            android:background="#ee2e429f"
+            android:gravity="center">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Time1.2">
-            </Button>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/chat"
+
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/handshake3"
+                android:scaleType="centerCrop"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/call"
+                android:scaleType="centerCrop"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/inbox"
+                android:scaleType="centerCrop"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/maps"
+                android:scaleType="centerCrop"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/music"
+                android:scaleType="centerCrop"
+                />
 
         </LinearLayout>
 
