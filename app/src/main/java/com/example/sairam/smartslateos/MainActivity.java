@@ -22,7 +22,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
+//import com.google.android.gms.maps.model.*;
 
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         checkLocation(); //check whether location service is enable or not in your  phone
+        temperature = findViewById(R.id.tv_temperature);
+        humidity = findViewById(R.id.tv_humidity);
     }
 
     @Override
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // You can now create a LatLng Object for use with maps
         JSONWeatherTask task = new JSONWeatherTask(this);
         task.execute(new String[]{msg});
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+       // LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
     }
 
     private boolean checkLocation() {

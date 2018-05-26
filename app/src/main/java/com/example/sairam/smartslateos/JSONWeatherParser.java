@@ -22,9 +22,9 @@ public class JSONWeatherParser {
         loc.setLongitude(getFloat("lon", coordObj));
 
         JSONObject sysObj = getObject("sys", jObj);
-        loc.setCountry(getString("country", sysObj));
-        loc.setSunrise(getInt("sunrise", sysObj));
-        loc.setSunset(getInt("sunset", sysObj));
+//        loc.setCountry(getString("country", sysObj));
+//        loc.setSunrise(getInt("sunrise", sysObj));
+//        loc.setSunset(getInt("sunset", sysObj));
         loc.setCity(getString("name", jObj));
         weather.location = loc;
 
@@ -33,10 +33,10 @@ public class JSONWeatherParser {
 
         // We use only the first value
         JSONObject JSONWeather = jArr.getJSONObject(0);
-        weather.currentCondition.setWeatherId(getInt("id", JSONWeather));
-        weather.currentCondition.setDescr(getString("description", JSONWeather));
-        weather.currentCondition.setCondition(getString("main", JSONWeather));
-        weather.currentCondition.setIcon(getString("icon", JSONWeather));
+//        weather.currentCondition.setWeatherId(getInt("id", JSONWeather));
+//        weather.currentCondition.setDescr(getString("description", JSONWeather));
+//        weather.currentCondition.setCondition(getString("main", JSONWeather));
+//        weather.currentCondition.setIcon(getString("icon", JSONWeather));
 
         JSONObject mainObj = getObject("main", jObj);
         weather.currentCondition.setHumidity(getInt("humidity", mainObj));

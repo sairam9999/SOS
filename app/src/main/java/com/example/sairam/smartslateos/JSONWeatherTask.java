@@ -18,7 +18,7 @@ public class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
     protected Weather doInBackground(String... params) {
         Weather weather = new Weather();
 
-
+        String str = params[0];
 
         String data = ((new WeatherHttpClient()).getWeatherData(params[0]));
 
