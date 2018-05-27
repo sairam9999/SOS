@@ -15,6 +15,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private LocationRequest mLocationRequest;
     LocationManager locationManager;
     public static String TAG = "Order Slate";
-
+    private ImageView ivcart;
     private static final String TEMPERATURE_CLICKED = "Temperature";
     private static final String HUMIDITY_CLICKED = "Humidity";
     private long UPDATE_INTERVAL = 2 * 1000;  /* 10 secs */
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        final Context con = this.getApplicationContext();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -56,6 +58,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         checkLocation(); //check whether location service is enable or not in your  phone
         temperature = findViewById(R.id.tv_temperature);
         humidity = findViewById(R.id.tv_humidity);
+
+        ivcart = findViewById(R.id.cart);
+        ivcart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                Intent cartIntent = new Intent(con, CartActivity.class);
+//                startActivity(cartIntent);
+
+                    setContentView(R.layout.activity_cart);
+
+
+//                Toast.makeText(v.getContext(),
+//                        "The favorite list would appear on clicking this icon",
+//                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
