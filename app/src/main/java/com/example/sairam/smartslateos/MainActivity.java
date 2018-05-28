@@ -10,13 +10,17 @@ import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,9 +71,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 //                Intent cartIntent = new Intent(con, CartActivity.class);
 //                startActivity(cartIntent);
 
-                    setContentView(R.layout.activity_cart);
-
-
+                   // setContentView(R.layout.activity_cart);
+               RelativeLayout mainLayout = findViewById(R.id.videoscreen);
+                mainLayout.setVisibility(View.INVISIBLE);
+                CoordinatorLayout cartLayout = findViewById(R.id.example);
+                cartLayout.setVisibility(View.VISIBLE);
 //                Toast.makeText(v.getContext(),
 //                        "The favorite list would appear on clicking this icon",
 //                        Toast.LENGTH_LONG).show();
