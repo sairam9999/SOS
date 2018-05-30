@@ -7,90 +7,70 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-//import com.google.android.gms.maps.model.*;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
-
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
     private LocationManager mLocationManager;
     private LocationRequest mLocationRequest;
-    LocationManager locationManager;
-    public static String TAG = "Order Slate";
-    private ImageView ivcart;
-    private static final String TEMPERATURE_CLICKED = "Temperature";
-    private static final String HUMIDITY_CLICKED = "Humidity";
     private long UPDATE_INTERVAL = 2 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
-    public TextView temperature = null; //Need to change the access modifier to private
-    public TextView humidity = null;  //Need to change the access modifier to private
-
-    @Override
+    public static String TAG = "Google Map";
+    LocationManager locationManager;
+    LatLng latLng;
+    GoogleMap map = null;
+@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        final Context con = this.getApplicationContext();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        setContentView(R.layout.activity_map);
 
-        mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        checkLocation(); //check whether location service is enable or not in your  phone
-        temperature = findViewById(R.id.tv_temperature);
-        humidity = findViewById(R.id.tv_humidity);
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    mGoogleApiClient = new GoogleApiClient.Builder(this)
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
+            .addApi(LocationServices.API)
+            .build();
 
-        ivcart = findViewById(R.id.cart);
-        ivcart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    mLocationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+    checkLocation(); //check whether location service is enable or not in your  phone
+}
 
-//                Intent cartIntent = new Intent(con, CartActivity.class);
-//                startActivity(cartIntent);
 
-                   // setContentView(R.layout.activity_cart);
-               RelativeLayout mainLayout = findViewById(R.id.videoscreen);
-                mainLayout.setVisibility(View.INVISIBLE);
-                CoordinatorLayout cartLayout = findViewById(R.id.example);
-                cartLayout.setVisibility(View.VISIBLE);
-//                Toast.makeText(v.getContext(),
-//                        "The favorite list would appear on clicking this icon",
-//                        Toast.LENGTH_LONG).show();
-            }
-        });
+    @Override
+    public void onMapReady(GoogleMap map) {
+       // map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        this.map = map;
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}
-                    , 1);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}
+                    ,1);
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
             //                                          int[] grantResults)
@@ -103,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        if (mLocation == null) {
+        if(mLocation == null){
             startLocationUpdates();
         }
         if (mLocation != null) {
@@ -124,8 +104,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i(TAG, "Connection failed. Error: " + connectionResult.getErrorCode());
-    }
 
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -141,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             mGoogleApiClient.disconnect();
         }
     }
-
     @Override
     public void onLocationChanged(Location location) {
         String msg = "Updated Location: " +
@@ -151,17 +130,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 //        mLongitudeTextView.setText(String.valueOf(location.getLongitude() ));
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         // You can now create a LatLng Object for use with maps
-        JSONWeatherTask task = new JSONWeatherTask(this);
-        task.execute(new String[]{msg});
-       // LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+         latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        map.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
     }
-
     private boolean checkLocation() {
-        if (!isLocationEnabled())
+        if(!isLocationEnabled())
             showAlert();
         return isLocationEnabled();
     }
-
     private void showAlert() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Enable Location")
@@ -189,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
-
     protected void startLocationUpdates() {
         // Create the location request
         mLocationRequest = LocationRequest.create()
@@ -197,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .setInterval(UPDATE_INTERVAL)
                 .setFastestInterval(FASTEST_INTERVAL);
         // Request location updates
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -210,24 +186,5 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                 mLocationRequest, this);
         Log.d("reque", "--->>>>");
-    }
-    //Code for Google Maps
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent i
-                Log.d("Sairam", "Check");
-
-                Intent intent = new Intent(MainActivity.this, MapActivity.class);
-                MainActivity.this.startActivity(intent);
-            }
-        });
-
     }
 }
